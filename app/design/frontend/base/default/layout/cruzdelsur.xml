@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <!-- Adds Calculator into My Cart -->
+    <checkout_cart_index>
+        <reference name="checkout.cart.extra">
+            <block type="cruzdelsur/calculador" name="cds_calculador" as="cds.calculador" />
+        </reference>
+    </checkout_cart_index>
+
+    <!-- Uncomment this for basic styling your CMS Page -->
+    <!-- include this code in your CMS Page: {{block type="cruzdelsur/order_tracking" name="cruzdelsur.tracking" }} -->
+    <!-- <cms_page>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/cruzdelsur/tracking.css</stylesheet></action>
+        </reference>
+    </cms_page> -->
+
+</layout>

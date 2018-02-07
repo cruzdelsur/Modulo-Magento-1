@@ -1,0 +1,11 @@
+PATCH*
+
+#IDEs
+.DS_Store
+/.project
+/.settings
+/.idea
+/.mage
+/netbeans
+custom_options
+wrapping

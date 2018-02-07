@@ -1,0 +1,18 @@
+<?php
+/**
+ * @var $this Iurco_Cruzdelsur_Block_Order_Tracking_Rows
+ */
+?>
+
+<?php $trackingData = $this->getTrackingInformation() ?>
+
+<?php if($trackingData): ?>
+    <?php foreach($trackingData as $row): ?>
+        <tr>
+            <td><?php echo $row->getDate(); ?></td>
+            <td><?php echo $row->getBranchNumber(); ?></td>
+            <td><?php echo $row->getBranchName(); ?></td>
+            <td><?php echo $row->getStatus(); ?></td>
+        </tr>
+    <?php endforeach; ?>
+<?php endif; ?>

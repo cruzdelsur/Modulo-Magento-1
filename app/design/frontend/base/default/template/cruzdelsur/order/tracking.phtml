@@ -1,0 +1,104 @@
+<?php
+/**
+ * @category    design
+ * @package     base_default
+ */
+?>
+
+<?php $trackingNumber = $this->getTrackingNumber(); ?>
+<div id="cruzdelsur-tracking">
+    <div class="order-tracking">
+        <form id="tyord" name="tyord" method="POST">
+            <div class="fieldset">
+                <h2 class="legend"><?php echo $this->__('Order Tracking') ?></h2>
+                <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+                <ul class="form-list">
+                    <li class="fields">
+                        <div class="field">
+                            <label for="number" class="required"><em>*</em><?php echo $this->__('Tracking Number') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="number" id="number" class="input-text <?php echo $this->getValidationCssClasses(); ?>" minlength="3" maxlength="9" value="<?php echo $trackingNumber; ?>" title="<?php echo $this->__('Tracking Number'); ?>" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="buttons-set">
+                <button type="button" title="<?php echo $this->__('Submit'); ?>" class="button">
+                    <span><span><?php echo $this->__('Submit') ?></span></span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div id="response">
+        <table id="response-table" class="data-table">
+            <thead>
+                <tr>
+                    <th><?php echo $this->__('Date')?></th>
+                    <th><?php echo $this->__('Branch Number')?></th>
+                    <th><?php echo $this->__('Branch Name')?></th>
+                    <th><?php echo $this->__('Status')?></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="message"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var trackForm = new VarienForm('tyord', true);
+
+    var gtiurl = '<?php echo $this->getUrl('cruzdelsur/tracking/status') ?>';
+    $('response-table').hide();
+
+    function cdsgti(tid) {
+        $response   = $('response');
+        $message    = $response.select('#message').first();
+        $table      = $response.select('TABLE').first();
+        $tableBody  = $table.select('TBODY').first();
+
+        // cleanup previous data before calling
+        $tableBody.update('');
+        $table.hide();
+        $message.update('').hide();
+
+        new Ajax.Request(gtiurl, {
+            method: 'POST',
+            parameters: { 'number' : tid, 'isAjax': 1 },
+            onSuccess: function (result) {
+                console.log(result);
+                response = result.responseJSON;
+
+                if(response.error) {
+                    $message.update(response.message);
+                    $message.show();
+                    return;
+                }
+
+                var trackingData = response.table_rows;
+                console.log('response html: ');
+                console.log(trackingData);
+
+                $tableBody.update(trackingData);
+                $table.show();
+            },
+            onException: function (error) {
+                $message.update(error.message);
+                $message.show();
+            }
+        });
+    }
+
+    document.observe("dom:loaded", function() {
+        $$('FORM[name="tyord"] button[type="button"]').first().observe('click', function(e) {
+            Event.stop(e);
+            if(trackForm.validator.validate()) {
+                cdsgti($F('number'));
+            }
+        });
+    });
+
+    //]]>
+</script>

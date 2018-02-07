@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <carriers translate="label" module="cruzdelsur">
+            <label>Shipping Methods</label>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>330</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <cruzdelsur translate="label">
+                    <label>Cruz del Sur</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <model>cruzdelsur/carrier_cruzdelsur</model>
+                    <comment><![CDATA[Pongase en contacto con un representante <strong>Cruz del Sur</strong> para obtener tus datos de cliente.]]></comment>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <log translate="label">
+                            <label>Log Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </log>
+                        <clientid translate="label">
+                            <label>Id de Cliente:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </clientid>
+                        <user translate="label">
+                            <label>User</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </user>
+                        <password translate="label">
+                            <label>Password</label>
+                            <default></default>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </password>
+                        <sandbox_mode translate="label">
+                           <label>Modo Testing</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_yesno</source_model>
+                           <sort_order>60</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </sandbox_mode>
+                       <attribute_volume_code translate="label">
+                           <label>Volume Attribute</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>cruzdelsur/source_config_attribute_volume</source_model>
+                           <sort_order>70</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </attribute_volume_code>
+                       <recipient_information translate="label comment">
+                           <label>Recipient Information</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>cruzdelsur/source_config_recipient</source_model>
+                           <sort_order>75</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>From where we should take Recipient information (firstname, lastname, telephone, email)</comment>
+                       </recipient_information>
+                       <attribute_document_number_config_type translate="label comment">
+                           <label>Document Capture Mode</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>cruzdelsur/source_config_attribute_config_type</source_model>
+                           <sort_order>80</sort_order>
+                           <comment>From which entity will be retrieved Document Number value</comment>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </attribute_document_number_config_type>
+                       <attribute_document_number_code translate="label comment">
+                           <label>Customer Document Number</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>cruzdelsur/source_config_attribute_document</source_model>
+                           <sort_order>80</sort_order>
+                           <comment>Customer attribute for document number</comment>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <depends>
+                               <attribute_document_number_config_type>separated</attribute_document_number_config_type>
+                           </depends>
+                       </attribute_document_number_code>
+                       <attribute_document_number_sales_order translate="label comment">
+                           <label>Order Attribute code</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>80</sort_order>
+                           <comment>Attribute code from Sales Order entity</comment>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <depends>
+                               <attribute_document_number_config_type>sales_flat_order</attribute_document_number_config_type>
+                           </depends>
+                       </attribute_document_number_sales_order>
+                       <attribute_document_number_sales_order_address translate="label comment">
+                           <label>Shipping Address code</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>80</sort_order>
+                           <comment>Attribute code from Sales Order Address entity</comment>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <depends>
+                               <attribute_document_number_config_type>sales_flat_order_address</attribute_document_number_config_type>
+                           </depends>
+                       </attribute_document_number_sales_order_address>
+                       <guest_attribute_document_entity translate="label comment">
+                           <label>Guest Entity</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>cruzdelsur/source_config_attribute_guest_entity</source_model>
+                           <sort_order>90</sort_order>
+                           <comment>Entity to grab Document Number attribute code for Guest Users</comment>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <depends>
+                               <attribute_document_number_config_type>separated</attribute_document_number_config_type>
+                           </depends>
+                       </guest_attribute_document_entity>
+                       <guest_attribute_document_code translate="label comment">
+                           <label>Guest Attribute Code</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>100</sort_order>
+                           <comment>Column name from selected entity. Example: Entity = `sales_flat_order`, attribute code = `customer_taxvat`</comment>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <depends>
+                               <attribute_document_number_config_type>separated</attribute_document_number_config_type>
+                           </depends>
+                       </guest_attribute_document_code>
+                       <dispatch_mode translate="label">
+                           <label>Dispatch Mode</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>cruzdelsur/source_config_dispatch</source_model>
+                           <sort_order>110</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </dispatch_mode>
+                       <dispatch_comment_orderplaced translate="label">
+                           <label>Comment</label>
+                           <frontend_type>note</frontend_type>
+                           <sort_order>120</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>Keep in mind Dispatch Mode `On Order Placed`, will Ship the Order automatically.</comment>
+                           <depends><dispatch_mode>2</dispatch_mode></depends>
+                       </dispatch_comment_orderplaced>
+                       <dispatch_comment_orderstatus translate="label">
+                           <label>Comment</label>
+                           <frontend_type>note</frontend_type>
+                           <sort_order>120</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>Keep in mind Dispatch Mode `Depends on Order Status`, requires Magento has Cron configured. Otherwise it won't work.</comment>
+                           <depends><dispatch_mode>3</dispatch_mode></depends>
+                       </dispatch_comment_orderstatus>
+                       <dispatch_mode_order_status_current>
+                           <label>Current Order Status</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                           <sort_order>130</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>Status which the module needs to look for in order to execute the Dispatch.</comment>
+                           <depends><dispatch_mode>3</dispatch_mode></depends>
+                       </dispatch_mode_order_status_current>
+                       <dispatch_mode_order_status_new>
+                           <label>New Order Status</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                           <sort_order>140</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>Status that Orders will have after the Dispatch.</comment>
+                           <depends><dispatch_mode>3</dispatch_mode></depends>
+                       </dispatch_mode_order_status_new>
+                       <email_notification_on_shipment>
+                           <label>Send Email on Shipment</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_yesno</source_model>
+                           <sort_order>200</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>Send email notification to Customers when new Shipment is created.</comment>
+                       </email_notification_on_shipment>
+                       <email_notification_on_tracking_code>
+                           <label>Send Email on Tracking Code</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_yesno</source_model>
+                           <sort_order>210</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                           <comment>Send email notification to Customers when new tracking code is associated with a Shipment.</comment>
+                       </email_notification_on_tracking_code>
+                    </fields>
+                </cruzdelsur>
+            </groups>
+        </carriers>
+    </sections>
+</config>

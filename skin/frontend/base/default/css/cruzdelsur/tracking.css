@@ -1,0 +1,13 @@
+#cruzdelsur-tracking .order-tracking { width: 50%; margin: 0 auto; }
+#cruzdelsur-tracking .order-tracking ul {
+    list-style: none !important;
+}
+
+#cruzdelsur-tracking #response { margin-top: 25px; }
+#cruzdelsur-tracking .fieldset p.required {
+  margin-bottom: 5px;
+  float: right;
+  font-size: 12px;
+  margin-top: 0px;
+  color: #df280a;
+}

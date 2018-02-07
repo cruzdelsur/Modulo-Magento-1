@@ -1,0 +1,73 @@
+<?php
+    $currentCity = $this->getCityFromQuote();
+?>
+<div class="shipping">
+    <h3><?php echo $this->__('Shipping Estimation'); ?></h3>
+    <div class="shipping-form shipping-form-cds">
+        <ul class="form-list">
+            <li class="shipping-country">
+                <div class="field">
+                    <label for="localidad"><?php echo $this->__('Locality'); ?></label>
+                    <div class="input-box"><input type="text" name="localidad" id="localidad" value="<?php echo $currentCity; ?>" title="<?php echo $this->__('Locality'); ?>" /></div>
+                </div>
+            </li>
+            <li class="shipping-postcode">
+                <div class="field">
+                    <label for="codigopostal"><?php echo $this->__('ZIP Code'); ?></label>
+                    <div class="input-box"><input type="text" name="codigopostal" id="codigopostal" value="" title="<?php echo $this->__('ZIP Code'); ?>" /></div>
+                </div>
+            </li>
+            <li class="shipping-region">
+                <label for="">&nbsp;</label>
+                <div class="input-box">
+                    <button type="button" title="<?php echo $this->__('Estimate'); ?>" class="button2" id="cdsestimate">
+                        <span><span><?php echo $this->__('Estimate'); ?></span></span>
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="response"></div>
+
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var $j = jQuery.noConflict();
+
+    $j(document).ready(function($){
+        $j('#cdsestimate').click(function() {
+
+            $j('#response').empty();
+
+            $.ajax('<?php echo $this->getUrl('cruzdelsur/calculador/costoenvio') ?>', {
+                'type': 'POST',
+                'dataType': 'json',
+                'data': $j('.shipping-form-cds INPUT').serialize(),
+                'success': function (response) {
+                    console.log(response);
+
+                    if(response.error) {
+                        $j('#response').html(response.message);
+                        return;
+                    }
+
+                    var result = response.Respuesta[0];
+                    if(result.Estado == 0) {
+                        $j('#response').empty();
+                        var estimates = response.Cotizaciones;
+                        $j(estimates).each(function(i,e) {
+                            $j('#response').append('<div><strong>' + e.Descripcion + '</strong>: ' + e.ValorTxt + ' - ' + '<small>Horario: ' + e.HorasDesdeHastaTxt+ '</small></div>');
+                        });
+                    } else {
+                        $j('#response').html(result.Descripcion);
+                    }
+                },
+                'error': function (error) {
+                    $j('#response').html(error.message);
+                }
+            });
+        });
+    });
+    //]]>
+</script>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Iurco_Cruzdelsur>
+        <active>true</active>
+        <codePool>community</codePool>
+        <depends>
+            <Mage_Shipping />
+        </depends>
+  </Iurco_Cruzdelsur>
+  </modules>
+</config>
