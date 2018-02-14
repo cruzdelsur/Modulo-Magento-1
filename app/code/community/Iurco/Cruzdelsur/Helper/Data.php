@@ -388,7 +388,7 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getCronPageSizeLimit()
     {
-        return 50;
+        return 500;
     }
 
 }
