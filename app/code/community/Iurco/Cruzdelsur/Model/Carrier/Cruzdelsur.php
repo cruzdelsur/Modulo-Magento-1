@@ -198,13 +198,20 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
      */
     public function cotizarEnvio($params)
     {
+
         try {
             $helper = Mage::helper('cruzdelsur');
             $helper->log(__METHOD__);
             $helper->log($params);
 
             $api = $helper->getApiInstance();
-            $response = $api->getData('http://apicds.com/api/NuevaCotXVol', $params);
+            if($helper->isSandboxEnabled()){
+                $url = $helper->getApiSandboxUrl().'NuevaCotXVol';
+            }else{
+                $url = $helper->getApiProductionUrl().'NuevaCotXVol';
+            }
+
+            $response = $api->getData($url, $params);
             $helper->log('response: ');
             $helper->log($response);
 
@@ -263,15 +270,22 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
             $helper->log($params);
 
             $api = $helper->getApiInstance();
+            //@deprecated
             //TODO BEGIN workaround/fix for this specific endpoint
             // this `id_cliente` should be removed in favor of `idcliente`
             // already included within `getData()`
-            $creds = Mage::helper('cruzdelsur')->getApiCredentials();
-            $params['id_cliente'] = $creds->getClientId();
+            //$creds = Mage::helper('cruzdelsur')->getApiCredentials();
+            //$params['id_cliente'] = $creds->getClientId();
             // END workaround
 
             //TODO encapsulate API response within current model using getters/setters
-            $response = $api->getData('http://apicds.com/api/PedirDespachoCotizacion', $params);
+            if($helper->isSandboxEnabled()){
+                $url = $helper->getApiSandboxUrl().'PedirDespachoCotizacion';
+            }else{
+                $url = $helper->getApiProductionUrl().'PedirDespachoCotizacion';
+            }
+
+            $response = $api->getData($url, $params);
 
             $helper->log('response:');
             $helper->log($response);
@@ -296,14 +310,21 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
         }
 
         try {
-            Mage::helper('cruzdelsur')->log(__METHOD__);
-            Mage::helper('cruzdelsur')->log($estimateNumber);
+            $helper = Mage::helper('cruzdelsur');
+            $helper->log(__METHOD__);
+            $helper->log($estimateNumber);
 
             $params = array();
             $params['id'] = $estimateNumber;
 
             $api = Mage::getModel('cruzdelsur/api');
-            $response = $api->getData('http://apicds.com/api/TrackingCotizacion', $params);
+            if($helper->isSandboxEnabled()){
+                $url = $helper->getApiSandboxUrl().'TrackingCotizacion';
+            }else{
+                $url = $helper->getApiProductionUrl().'TrackingCotizacion';
+            }
+
+            $response = $api->getData($url, $params);
 
             Mage::helper('cruzdelsur')->log('response:');
             Mage::helper('cruzdelsur')->log($response);

@@ -414,4 +414,50 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
         return $observer;
     }
 
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return Varien_Event_Observer
+     * Check when order status change
+     * if status canceled && shipping method is cruzdelsur
+     * set order as disable | is_active = 0
+     */
+    public function disableCanceledOrders(Varien_Event_Observer $observer)
+    {
+
+        $helper = Mage::helper('cruzdelsur');
+        $helper->log(__METHOD__);
+
+        if ($helper->isActive()) {
+
+            $order = $observer->getEvent()->getOrder();
+            $orderStatus = $order->getStatus();
+            $orderShippingMethod = $order->getShippingMethod();
+            
+            if ($orderStatus == Iurco_Cruzdelsur_Model_Order::ORDER_CANCELED_STATUS && in_array($orderShippingMethod, $this->getCarrierCodes())) {
+                $cdsOrder = Mage::getModel('cruzdelsur/order')->load($order->getIncrementId(), Iurco_Cruzdelsur_Model_Order::INCREMENT_ID_COLUMN_NAME);
+                if ($cdsOrder->getOrderIncrementId()) {
+                    try {
+                        $helper->log('Disabling Order #' . $order->getIncrementId());
+                        $cdsOrder->setIsActive(0);
+                        $cdsOrder->setComment('Order Canceled : (' . $order->getUpdatedAt() . ')');
+                        $cdsOrder->save();
+                        $helper->log('Order canceled by magento, disabling #' . $cdsOrder->getOrderIncrementId());
+                        return $observer;
+                    } catch (Exception $e) {
+                        $helper->log('Couldn\'t save order' . $cdsOrder->getOrderIncrementId());
+                        $helper->log($e->getMessage());
+                        return $observer;
+                    }
+                } else {
+                    $helper->log('Order not found in cruzdelsur_orders #' . $cdsOrder->getOrderIncrementId());
+                    return $observer;
+                }
+            } else {
+                $helper->log('Status (' . $orderStatus . ') or shipping method (' . $orderShippingMethod . ') out of scope. Keep moving...');
+                return $observer;
+            }
+        }
+        return $observer;
+    }
+
 }

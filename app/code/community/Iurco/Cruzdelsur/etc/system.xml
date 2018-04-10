@@ -38,42 +38,96 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </log>
-                        <clientid translate="label">
-                            <label>Id de Cliente:</label>
-                            <default></default>
-                            <frontend_type>text</frontend_type>
+                        <sandbox_mode translate="label">
+                            <label>Modo Testing</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </clientid>
-                        <user translate="label">
-                            <label>User</label>
+                        </sandbox_mode>
+                        <clientid translate="label">
+                            <label>Id de Cliente PROD:</label>
                             <default></default>
                             <frontend_type>text</frontend_type>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </user>
-                        <password translate="label">
-                            <label>Password</label>
+                            <depends><sandbox_mode><value>0</value></sandbox_mode></depends>
+                        </clientid>
+                        <user translate="label">
+                            <label>User PROD</label>
                             <default></default>
-                            <frontend_type>password</frontend_type>
+                            <frontend_type>text</frontend_type>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>0</value></sandbox_mode></depends>
+                        </user>
+                        <password translate="label">
+                            <label>Password PROD</label>
+                            <default></default>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>0</value></sandbox_mode></depends>
                         </password>
-                        <sandbox_mode translate="label">
-                           <label>Modo Testing</label>
-                           <frontend_type>select</frontend_type>
-                           <source_model>adminhtml/system_config_source_yesno</source_model>
-                           <sort_order>60</sort_order>
-                           <show_in_default>1</show_in_default>
-                           <show_in_website>1</show_in_website>
-                           <show_in_store>1</show_in_store>
-                       </sandbox_mode>
+                        <api_prod translate="label">
+                            <label>API url PROD</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>0</value></sandbox_mode></depends>
+                        </api_prod>
+                        <clientid_sandbox translate="label">
+                            <label>Id de Cliente SANDBOX:</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>1</value></sandbox_mode></depends>
+                        </clientid_sandbox>
+                        <user_sandbox translate="label">
+                            <label>User SANDBOX</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>1</value></sandbox_mode></depends>
+                        </user_sandbox>
+                        <password_sandbox translate="label">
+                            <label>Password SANDBOX</label>
+                            <default></default>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>1</value></sandbox_mode></depends>
+                        </password_sandbox>
+                        <api_sandbox translate="label">
+                            <label>API url SANDBOX</label>
+                            <default></default>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><sandbox_mode><value>1</value></sandbox_mode></depends>
+                        </api_sandbox>
+
                        <attribute_volume_code translate="label">
                            <label>Volume Attribute</label>
                            <frontend_type>select</frontend_type>
@@ -236,6 +290,41 @@
                            <show_in_store>1</show_in_store>
                            <comment>Send email notification to Customers when new tracking code is associated with a Shipment.</comment>
                        </email_notification_on_tracking_code>
+
+                        <heading_cron_options translate="label"> <!-- header for system config -->
+                            <label>CRON Options</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>211</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </heading_cron_options>
+                        <limit translate="label comment">
+                            <label>CRON -  Max Orders by run</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>cruzdelsur/source_config_cron_limit</source_model>
+                            <sort_order>212</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>How many orders will be processed in each run? If you are not sure, choose 50-100.</comment>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                        </limit>
+                        <status_to_apply_after_trackingcode>
+                            <label>CRON -  Status To Apply After Tracking Code</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>cruzdelsur/source_config_cron_statuses</source_model>
+                            <sort_order>213</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Select status to apply after tracking code.</comment>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                        </status_to_apply_after_trackingcode>
                     </fields>
                 </cruzdelsur>
             </groups>

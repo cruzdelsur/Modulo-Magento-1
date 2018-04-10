@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Iurco_Cruzdelsur>
-            <version>0.2.1</version>
+            <version>0.2.3</version>
         </Iurco_Cruzdelsur>
     </modules>
     <global>
@@ -104,6 +104,15 @@
                     </cruzdelsur>
                 </observers>
             </sales_order_shipment_save_before>
+            <sales_order_save_after>
+                <observers>
+                    <cruzdelsur_disable_canceled_orders>
+                        <type>singleton</type>
+                        <class>cruzdelsur/observer</class>
+                        <method>disableCanceledOrders</method>
+                    </cruzdelsur_disable_canceled_orders>
+                </observers>
+            </sales_order_save_after>
         </events>
     </global>
     <frontend>
@@ -276,6 +285,8 @@
                 <dispatch_mode>1</dispatch_mode>
                 <email_notification_on_shipment>1</email_notification_on_shipment>
                 <email_notification_on_tracking_code>1</email_notification_on_tracking_code>
+                <limit>100</limit>
+                <status_to_apply_after_trackingcode>processing</status_to_apply_after_trackingcode>
             </cruzdelsur>
         </carriers>
     </default>

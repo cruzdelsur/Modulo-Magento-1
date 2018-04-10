@@ -162,7 +162,13 @@ $this->log($response);
     public function obtenerNICsDeCotizacionesPorReferencia($references)
     {
 $this->log(__METHOD__);
-        $url = 'http://apicds.com/api/ObtenerNICsDeCotizacionesPorReferencia';
+        $helper = Mage::helper('cruzdelsur');
+        if($helper->isSandboxEnabled()){
+            $url = $helper->getApiSandboxUrl().'ObtenerNICsDeCotizacionesPorReferencia';
+        }else{
+            $url = $helper->getApiProductionUrl().'ObtenerNICsDeCotizacionesPorReferencia';
+        }
+        
 
         // prepare unique string with values separated by ;
         if(is_array($references)) {
@@ -182,7 +188,13 @@ $this->log(__METHOD__);
      */
     public function nuevaCotXVol($params)
     {
-        $url = 'http://apicds.com/api/NuevaCotXVol';
+        $helper = Mage::helper('cruzdelsur');
+        if($helper->isSandboxEnabled()){
+            $url = $helper->getApiSandboxUrl().'NuevaCotXVol';
+        }else{
+            $url = $helper->getApiProductionUrl().'NuevaCotXVol';
+        }
+
         return $this->getData($url, $params);
     }
 
@@ -194,8 +206,13 @@ $this->log(__METHOD__);
     public function getTrackingDeUnNIC($params)
     {
 $this->log(__METHOD__);
-        $url = 'http://apicds.com/api/TrackingDeUnNIC';
-
+        $helper = Mage::helper('cruzdelsur');
+        if($helper->isSandboxEnabled()){
+            $url = $helper->getApiSandboxUrl().'TrackingDeUnNIC';
+        }else{
+            $url = $helper->getApiProductionUrl().'TrackingDeUnNIC';
+        }
+        
         $result = $this->getData($url, $params);
 
 $this->log($result);

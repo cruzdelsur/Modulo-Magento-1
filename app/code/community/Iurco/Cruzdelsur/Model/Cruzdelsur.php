@@ -4,12 +4,34 @@
  */
  class Iurco_Cruzdelsur_Model_Cruzdelsur extends Mage_Core_Model_Abstract
  {
-     const API_PRODUCTION_URL   = 'http://apicds.com/api/';
-     const API_SANDBOX_URL      = 'http://apicds.com/api/';
+//     const API_PRODUCTION_URL   = 'http://apicds.com/api/';
+//     const API_SANDBOX_URL      = 'http://apicds.com/api/';
+//
+//     const API_SANDBOX_CLIENT_ID    = '7098d9f8-de4c-4d27-9e93-60823a16d405';
+//     const API_SANDBOX_USERNAME     = 'ecommerce_test_api';
+//     const API_SANDBOX_PASSWORD     = 'api_test_ecommerce';
 
-     const API_SANDBOX_CLIENT_ID    = '7098d9f8-de4c-4d27-9e93-60823a16d405';
-     const API_SANDBOX_USERNAME     = 'ecommerce_test_api';
-     const API_SANDBOX_PASSWORD     = 'api_test_ecommerce';
+    const XPATH_PRODUCTION_URL          = 'carriers/cruzdelsur/api_prod';
+    const XPATH_SANDBOX_URL             = 'carriers/cruzdelsur/api_sandbox';
+    const CONFIG_PATH_PRODUCTION_URL    = 'api_prod';
+    const CONFIG_PATH_SANDBOX_URL       = 'api_sandbox';
+
+    const XPATH_PRODUCTION_CLIENT_ID        = 'carriers/cruzdelsur/clientid';
+    const XPATH_PRODUCTION_USER             = 'carriers/cruzdelsur/user';
+    const XPATH_PRODUCTION_PASSWORD         = 'carriers/cruzdelsur/password';
+    const CONFIG_PATH_PRODUCTION_CLIENT_ID  = 'clientid';
+    const CONFIG_PATH_PRODUCTION_USER       = 'user';
+    const CONFIG_PATH_PRODUCTION_PASSWORD   = 'password';
+
+
+    const XPATH_SANDBOX_CLIENT_ID          = 'carriers/cruzdelsur/clientid_sandbox';
+    const XPATH_SANDBOX_USER               = 'carriers/cruzdelsur/user_sandbox';
+    const XPATH_SANDBOX_PASSWORD           = 'carriers/cruzdelsur/password_sandbox';
+    const CONFIG_PATH_SANDBOX_CLIENT_ID    = 'clientid_sandbox';
+    const CONFIG_PATH_SANDBOX_USER         = 'user_sandbox';
+    const CONFIG_PATH_SANDBOX_PASSWORD     = 'password_sandbox';
+
+
 
      const XPATH_SANDBOX_MODE = 'carriers/cruzdelsur/sandbox_mode';
      const CONFIG_PATH_SANDBOX_MODE = 'sandbox_mode';

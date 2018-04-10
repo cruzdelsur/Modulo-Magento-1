@@ -68,7 +68,7 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getApiProductionUrl()
     {
-        return $this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::API_PRODUCTION_URL);
+        return $this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_PRODUCTION_URL);
     }
 
 
@@ -78,7 +78,7 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getApiSandboxUrl()
     {
-        return $this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::API_SANDBOX_URL);
+        return $this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_SANDBOX_URL);
     }
 
 
@@ -359,16 +359,15 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
         $object = new Varien_Object();
 
         if($this->isSandboxEnabled()) {
-            $object->setClientId(Iurco_Cruzdelsur_Model_Cruzdelsur::API_SANDBOX_CLIENT_ID);
-            $object->setUser(Iurco_Cruzdelsur_Model_Cruzdelsur::API_SANDBOX_USERNAME);
-            $object->setPassword(Iurco_Cruzdelsur_Model_Cruzdelsur::API_SANDBOX_PASSWORD);
+            $object->setClientId($this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_SANDBOX_CLIENT_ID));
+            $object->setUser($this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_SANDBOX_USER));
+            $object->setPassword($this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_SANDBOX_PASSWORD));
 
         } else {
-            $object->setClientId($this->config('clientid'));
-            $object->setUser($this->config('user'));
-            $object->setPassword($this->config('password'));
+            $object->setClientId($this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_PRODUCTION_CLIENT_ID));
+            $object->setUser($this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_PRODUCTION_USER));
+            $object->setPassword($this->config(Iurco_Cruzdelsur_Model_Cruzdelsur::CONFIG_PATH_PRODUCTION_PASSWORD));
         }
-
         return $object;
     }
 
@@ -388,7 +387,23 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getCronPageSizeLimit()
     {
-        return 500;
+        //return 50;
+        return $this->config('limit');
     }
 
+    /**
+     * @return string | config value
+     */
+    public function getStatusToApplyAfterTrackingCode()
+    {
+        return $this->config('status_to_apply_after_trackingcode');
+    }
+
+    /**
+     * @return string | config value
+     */
+    public function getStatusToSkipOrdersFromCron()
+    {
+        return $this->config('status_to_skip_orders');
+    }
 }

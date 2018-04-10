@@ -127,6 +127,12 @@ $this->_helper->log($trackingCodes);
                 $cdsOrder->setTrackingCode($trackingCode);
                 $cdsOrder->setIsProcessed(1);
 
+                //change order status after tracking code was applied
+                $order->setStatus($this->_helper->getStatusToApplyAfterTrackingCode());
+                $order->addStatusToHistory($this->_helper->getStatusToApplyAfterTrackingCode(), 'Tracking Code Applied : (' . $trackingCode .')', false);
+                $this->_helper->log('Order Modified with Tracking Code ' .$trackingCode );
+                $this->_helper->log('New Status: ' . $order->getStatus().' For Order: #' . $order->getIncrementId());
+
                 /**
                  * when shipment is saved, it will fire our observer (since we're listening to it)
                  * so we have added a double check to avoid trying to re-dispatch the shipment twice
@@ -139,6 +145,8 @@ $this->_helper->log($trackingCodes);
                     ->save();
 
                 $this->_helper->log('it should be saved by now...');
+
+
 
             } else {
                 $this->_helper->log('CDS Order Increment Id: ' . $cdsOrder->getOrderIncrementId());
@@ -174,6 +182,7 @@ $this->_helper->log($trackingCodes);
         $collection = Mage::getModel('cruzdelsur/order')->getCollection();
         $collection->addFieldToFilter(Iurco_Cruzdelsur_Model_Order::IS_DISPATCHED_COLUMN_NAME, array('eq' => '1'));
         $collection->addFieldToFilter(Iurco_Cruzdelsur_Model_Order::IS_PROCESSED_COLUMN_NAME, array('eq' => '0'));
+        $collection->addFieldToFilter(Iurco_Cruzdelsur_Model_Order::IS_ACTIVE_COLUMN_NAME, array('eq' => '1'));
         $collection->setPageSize($this->_helper->getCronPageSizeLimit());
         $collection->setCurPage(1);
         $collection->load();
@@ -223,6 +232,7 @@ $this->_helper->log('collection count: ' . $collection->count());
              $collection = Mage::getModel('cruzdelsur/order')->getCollection();
              $collection->addFieldToFilter(Iurco_Cruzdelsur_Model_Order::IS_DISPATCHED_COLUMN_NAME, array('eq' => '0'));
              $collection->addFieldToFilter(Iurco_Cruzdelsur_Model_Order::IS_PROCESSED_COLUMN_NAME, array('eq' => '0'));
+             $collection->addFieldToFilter(Iurco_Cruzdelsur_Model_Order::IS_ACTIVE_COLUMN_NAME, array('eq' => '1'));
              $collection->setPageSize($this->_helper->getCronPageSizeLimit());
              $collection->setCurPage(1);
 
@@ -254,6 +264,5 @@ $this->_helper->log('collection count: ' . $collection->count());
              }
          }
      }
-
 
 }
