@@ -460,4 +460,52 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
         return $observer;
     }
 
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return Varien_Event_Observer
+     * Check when order status change
+     * if status is selected in config options && order was disabled && shipping method is cruzdelsur
+     * set order as enabled | is_active = 1
+     */
+    public function enableCanceledOrders(Varien_Event_Observer $observer)
+    {
+
+        $helper = Mage::helper('cruzdelsur');
+        $helper->log(__METHOD__);
+
+        if ($helper->isActive()) {
+
+            $order = $observer->getEvent()->getOrder();
+            $orderStatus = $order->getStatus();
+            $orderShippingMethod = $order->getShippingMethod();
+            $statusToReenabledOrder = $helper->getStatusToReactiveOrdersForCron();
+            
+
+            if ($orderStatus == $statusToReenabledOrder && in_array($orderShippingMethod, $this->getCarrierCodes())) {
+                $cdsOrder = Mage::getModel('cruzdelsur/order')->load($order->getIncrementId(), Iurco_Cruzdelsur_Model_Order::INCREMENT_ID_COLUMN_NAME);
+                if ($cdsOrder->getOrderIncrementId() && $cdsOrder->getIsActive() == 0 && $cdsOrder->getIsProcessed() == 0) {
+                    try {
+                        $helper->log('Reenabling due config options Order #' . $order->getIncrementId());
+                        $cdsOrder->setIsActive(1);
+                        $cdsOrder->setComment('Order uncanceled by magento | re activated due config options: (' . $order->getUpdatedAt() . ')' . $cdsOrder->getComment() );
+                        $cdsOrder->save();
+                        $helper->log('Order uncanceled by magento, reenabling #' . $cdsOrder->getOrderIncrementId());
+                        return $observer;
+                    } catch (Exception $e) {
+                        $helper->log('Couldn\'t save order' . $cdsOrder->getOrderIncrementId());
+                        $helper->log($e->getMessage());
+                        return $observer;
+                    }
+                } else {
+                    $helper->log('Order not found in cruzdelsur_orders #' . $cdsOrder->getOrderIncrementId());
+                    return $observer;
+                }
+            } else {
+                $helper->log('Status (' . $orderStatus . ') or shipping method (' . $orderShippingMethod . ') out of scope. Keep moving...');
+                return $observer;
+            }
+        }
+        return $observer;
+    }
+
 }

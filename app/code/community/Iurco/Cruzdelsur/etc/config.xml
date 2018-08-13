@@ -111,6 +111,11 @@
                         <class>cruzdelsur/observer</class>
                         <method>disableCanceledOrders</method>
                     </cruzdelsur_disable_canceled_orders>
+                    <cruzdelsur_reenabled_canceled_orders>
+                        <type>singleton</type>
+                        <class>cruzdelsur/observer</class>
+                        <method>enableCanceledOrders</method>
+                    </cruzdelsur_reenabled_canceled_orders>
                 </observers>
             </sales_order_save_after>
         </events>
@@ -287,6 +292,7 @@
                 <email_notification_on_tracking_code>1</email_notification_on_tracking_code>
                 <limit>100</limit>
                 <status_to_apply_after_trackingcode>processing</status_to_apply_after_trackingcode>
+                <status_to_reenabled_orders>pending_payment</status_to_reenabled_orders>
             </cruzdelsur>
         </carriers>
     </default>

@@ -406,4 +406,12 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return $this->config('status_to_skip_orders');
     }
+    
+    /**
+     * @return string | config value
+     */
+    public function getStatusToReactiveOrdersForCron()
+    {
+        return $this->config('status_to_reenabled_orders');
+    }
 }
