@@ -388,7 +388,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Enables fixed rate for all shipping methods.</comment>
+                            <comment>Enables fixed rate for Express shipping method.</comment>
                             <depends>
                                 <active>1</active>
                             </depends>
@@ -400,7 +400,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Set fixed rate amount for all shipping methods.</comment>
+                            <comment>Set fixed rate amount for Express shipping method.</comment>
                             <depends>
                                 <active>1</active>
                                 <enable_fixed_rate>1</enable_fixed_rate>

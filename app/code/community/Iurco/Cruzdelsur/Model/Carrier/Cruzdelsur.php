@@ -129,11 +129,11 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
         $rate = Mage::getModel('shipping/rate_result_method');
         $helper = Mage::helper('cruzdelsur');
         // check if fixed rate is anabled and override estimation original value
-        if ($helper->isFixedRateEnabled()){
-            $helper->log('Fixed Rate Enabled');
-            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
-            $data['Valor'] = $helper->getFixedRateAmount();
-        }
+//        if ($helper->isFixedRateEnabled()){
+//            $helper->log('Fixed Rate Enabled');
+//            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
+//            $data['Valor'] = $helper->getFixedRateAmount();
+//        }
         //if request has free shipping rule applied or all items has free shipping attribute set shipping price & cost free
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
             $helper->log(__METHOD__);
@@ -163,11 +163,11 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
         $rate = Mage::getModel('shipping/rate_result_method');
         $helper = Mage::helper('cruzdelsur');
         // check if fixed rate is anabled and override estimation original value
-        if ($helper->isFixedRateEnabled()){
-            $helper->log('Fixed Rate Enabled');
-            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
-            $data['Valor'] = $helper->getFixedRateAmount();
-        }
+//        if ($helper->isFixedRateEnabled()){
+//            $helper->log('Fixed Rate Enabled');
+//            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
+//            $data['Valor'] = $helper->getFixedRateAmount();
+//        }
 
         //if request has free shipping rule applied or all items has free shipping attribute set shipping price & cost free
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
