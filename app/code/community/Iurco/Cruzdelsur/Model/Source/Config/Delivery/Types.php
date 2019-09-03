@@ -8,4 +8,7 @@ class Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types
     const ENTREGA_DOMICILIO_CODE = 'E';
     const CARRIER_ENTREGA_DOMICILIO_CODE = 'entregadomicilio';
 
+    const ENTREGA_DOMICILIO_EXPRESS_CODE = 'E';
+    const CARRIER_ENTREGA_DOMICILIO_EXPRESS_CODE = 'entregadomicilioexpress';
+
 }

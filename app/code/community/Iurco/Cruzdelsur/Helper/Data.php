@@ -141,7 +141,8 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return array(
             Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
-            Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+            Mage_Catalog_Model_Product_Type::TYPE_BUNDLE
         );
     }
 
@@ -279,27 +280,80 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
 
         foreach ($cart->getAllVisibleItems() as $item) {
             if(!in_array($item->getProductType(), $this->getEnabledProductTypes())) continue;
+            // get cart dimensions for not bundle products
+            if ($item->getProductType() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                $product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
 
-            $product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
+                $qty    = $item->getQty();
+                $weight = $product->getWeight();
+                $volume = $product->getData($volumeCode);
 
-            $qty    = $item->getQty();
-            $weight = $product->getWeight();
-            $volume = $product->getData($volumeCode);
-
-            $data = array();
-            $data["qty"]      = $qty;
-            $data["weight"]   = $weight;
-            $data["volume"]   = $volume;
-            $data["name"]     = $item->getProduct()->getName();
+                $data = array();
+                $data["qty"]      = $qty;
+                $data["weight"]   = $weight;
+                $data["volume"]   = $volume;
+                $data["name"]     = $item->getProduct()->getName();
 
 
-            array_push($cartData, $data);
+                array_push($cartData, $data);
 
-            $cartData["weight_total"] = ($qty * $weight) + $cartData["weight_total"];
-            $cartData["volume_total"] = ($qty * $volume) + $cartData["volume_total"];
+                $cartData["weight_total"] = ($qty * $weight) + $cartData["weight_total"];
+                $cartData["volume_total"] = ($qty * $volume) + $cartData["volume_total"];
+            }
+            // get cart dimensions for bundle products
+            if ($item->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                $bundleItemsArray = array();
+                $bundleItemQty = 0;
+                $bundleItemWeight = 0;
+                $bundleItemVolume = 0;
+                //get options of bundle items added to cart
+                $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+                //load bundle product to get childs data
+                $product = Mage::getModel('catalog/product')->setStoreId(Mage::app()->getStore()->getId())->load($item->getProduct()->getId());
+                $bundleOptions = $product->getTypeInstance(true)
+                    ->getSelectionsCollection($product->getTypeInstance(true)->getOptionsIds($product), $product);
+
+                foreach ($bundleOptions as $bundleItem) {
+                    //load bundle's child items to get requiere data
+                    $simpleProductBundle = Mage::getModel('catalog/product')->load($bundleItem->getProductId());
+                    //set name as key because is the only value that matchs values retrieve by $options
+                    $bundleItemsArray[$bundleItem->getName()] = array(
+                        'weight' => $simpleProductBundle->getWeight(),
+                        'volume' => $simpleProductBundle->getData($volumeCode)
+                    ) ;
+                }
+
+                //loop optiones to get qty
+                foreach($options['bundle_options'] as $option)
+                {
+                    if (isset($option['value'])) {
+                        foreach ($option['value'] as $itemOption){
+                            //set needed values for bundle's items that exists in cart (Quote)
+                            $bundleItemQty = $itemOption['qty'];
+                            $bundleItemWeight = $bundleItemsArray[$itemOption['title']]['weight'];
+                            $bundleItemVolume = $bundleItemsArray[$itemOption['title']]['volume'];
+                        }
+                    }
+
+
+                    $data = array();
+                    $data["qty"]      = $bundleItemQty;
+                    $data["weight"]   = $bundleItemWeight;
+                    $data["volume"]   = $bundleItemVolume;
+                    $data["name"]     = $item->getProduct()->getName();
+
+
+                    array_push($cartData, $data);
+
+                    $bundleItemWeight = ($bundleItemQty * $bundleItemWeight);
+                    $bundleItemVolume = ($bundleItemQty * $bundleItemVolume);
+
+                    $cartData["weight_total"] = $bundleItemWeight + $cartData["weight_total"];
+                    $cartData["volume_total"] = $bundleItemVolume + $cartData["volume_total"];
+
+                }
+            }
         }
-
-
         $this->log($cartData);
 
         return $cartData;
@@ -330,10 +384,10 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return
      */
-     public function cleanEstimationInSession()
-     {
-         Mage::getSingleton('core/session')->unsCdsCotizaciones();
-     }
+    public function cleanEstimationInSession()
+    {
+        Mage::getSingleton('core/session')->unsCdsCotizaciones();
+    }
 
 
     /**
@@ -406,12 +460,43 @@ class Iurco_Cruzdelsur_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return $this->config('status_to_skip_orders');
     }
-    
+
     /**
      * @return string | config value
      */
     public function getStatusToReactiveOrdersForCron()
     {
         return $this->config('status_to_reenabled_orders');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsDeliveryExpressActive()
+    {
+        return $this->config('delivery_express');
+    }
+    /**
+     * @return mixed
+     */
+    public function getDeliveryExpressTitle()
+    {
+        return $this->config('delivery_express_title');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isFixedRateEnabled()
+    {
+        return $this->config('enable_fixed_rate');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFixedRateAmount()
+    {
+        return $this->config('fixed_rate_amount');
     }
 }

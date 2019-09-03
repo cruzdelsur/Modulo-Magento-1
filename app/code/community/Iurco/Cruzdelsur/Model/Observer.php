@@ -11,6 +11,7 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
     {
         return [
             'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_CODE,
+            'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_EXPRESS_CODE,
             'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_RETIRO_SUCURSAL_CODE
         ];
     }
@@ -60,6 +61,7 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
 
         $retiro = 'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_RETIRO_SUCURSAL_CODE;
         $domicilio = 'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_CODE;
+        $domicilioExpress = 'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_EXPRESS_CODE;
         $data = false;
 
         switch($method) {
@@ -67,6 +69,9 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
                 $data = Mage::getModel('core/session')->getCdsRetiroSucursal();
                 break;
             case $domicilio:
+                $data = Mage::getModel('core/session')->getCdsEnvioDomicilio();
+                break;
+            case $domicilioExpress:
                 $data = Mage::getModel('core/session')->getCdsEnvioDomicilio();
                 break;
             default:
@@ -432,7 +437,7 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
             $order = $observer->getEvent()->getOrder();
             $orderStatus = $order->getStatus();
             $orderShippingMethod = $order->getShippingMethod();
-            
+
             if ($orderStatus == Iurco_Cruzdelsur_Model_Order::ORDER_CANCELED_STATUS && in_array($orderShippingMethod, $this->getCarrierCodes())) {
                 $cdsOrder = Mage::getModel('cruzdelsur/order')->load($order->getIncrementId(), Iurco_Cruzdelsur_Model_Order::INCREMENT_ID_COLUMN_NAME);
                 if ($cdsOrder->getOrderIncrementId()) {
@@ -479,7 +484,7 @@ class Iurco_Cruzdelsur_Model_Observer extends Mage_Core_Model_Session_Abstract
             $orderStatus = $order->getStatus();
             $orderShippingMethod = $order->getShippingMethod();
             $statusToReenabledOrder = $helper->getStatusToReactiveOrdersForCron();
-            
+
 
             if ($orderStatus == $statusToReenabledOrder && in_array($orderShippingMethod, $this->getCarrierCodes())) {
                 $cdsOrder = Mage::getModel('cruzdelsur/order')->load($order->getIncrementId(), Iurco_Cruzdelsur_Model_Order::INCREMENT_ID_COLUMN_NAME);

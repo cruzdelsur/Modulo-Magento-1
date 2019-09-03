@@ -85,6 +85,7 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
                         break;
                     case Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::ENTREGA_DOMICILIO_CODE:
                         $method = $this->_getEnvioDomicilio($fulldata, $request);
+                        $flag = $helper->getIsDeliveryExpressActive();
                         break;
                     default:
                         $method = false;
@@ -93,6 +94,9 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
 
                 if($method) {
                     $result->append($method);
+                    if (isset($flag) && $flag && $method = $this->_getEnvioDomicilioQuick($fulldata, $request)) {
+                        $result->append($method);
+                    }
                 } else {
                     $helper->log('switch for selecting delivery type ended up in case `default`. no method...');
                     $helper->log($estimation);
@@ -123,10 +127,15 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
     {
         /** @var Mage_Shipping_Model_Rate_Result_Method $rate */
         $rate = Mage::getModel('shipping/rate_result_method');
-
+        $helper = Mage::helper('cruzdelsur');
+        // check if fixed rate is anabled and override estimation original value
+        if ($helper->isFixedRateEnabled()){
+            $helper->log('Fixed Rate Enabled');
+            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
+            $data['Valor'] = $helper->getFixedRateAmount();
+        }
         //if request has free shipping rule applied or all items has free shipping attribute set shipping price & cost free
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-            $helper = Mage::helper('cruzdelsur');
             $helper->log(__METHOD__);
             $helper->log('Free Shipping : true');
             $data['Valor'] = '0,00';
@@ -152,18 +161,61 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
     protected function _getEnvioDomicilio($data, $request)
     {
         $rate = Mage::getModel('shipping/rate_result_method');
+        $helper = Mage::helper('cruzdelsur');
+        // check if fixed rate is anabled and override estimation original value
+        if ($helper->isFixedRateEnabled()){
+            $helper->log('Fixed Rate Enabled');
+            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
+            $data['Valor'] = $helper->getFixedRateAmount();
+        }
 
         //if request has free shipping rule applied or all items has free shipping attribute set shipping price & cost free
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-            $helper = Mage::helper('cruzdelsur');
             $helper->log(__METHOD__);
             $helper->log('Free Shipping : true');
             $data['Valor'] = '0,00';
         }
+
         $rate->setCarrier($this->_code);
         $rate->setCarrierTitle($this->getConfigData('title'));
         $rate->setMethod(Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_CODE);
         $rate->setMethodTitle($data['Descripcion']);
+        $rate->setPrice($data['Valor']);
+        $rate->setCost($data['Valor']);
+
+        Mage::getModel('core/session')->setCdsEnvioDomicilio($data);
+
+        return $rate;
+    }
+    /**
+     * @param $data
+     * @param $request
+     * @return
+     */
+    protected function _getEnvioDomicilioQuick($data, $request)
+    {
+        $rate = Mage::getModel('shipping/rate_result_method');
+        $helper = Mage::helper('cruzdelsur');
+
+        // check if fixed rate is anabled and override estimation original value
+        if ($helper->isFixedRateEnabled()){
+            $helper->log('Fixed Rate Enabled');
+            $helper->log($helper->getFixedRateamount(). ' applied -- original Shipping Rate: ' . $data['Valor'] );
+            $data['Valor'] = $helper->getFixedRateAmount();
+        }
+
+        //if request has free shipping rule applied or all items has free shipping attribute set shipping price & cost free
+        if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
+
+            $helper->log(__METHOD__);
+            $helper->log('Free Shipping : true');
+            $data['Valor'] = '0,00';
+        }
+
+        $rate->setCarrier($this->_code);
+        $rate->setCarrierTitle($this->getConfigData('title'));
+        $rate->setMethod(Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_EXPRESS_CODE);
+        $rate->setMethodTitle($helper->getDeliveryExpressTitle());
         $rate->setPrice($data['Valor']);
         $rate->setCost($data['Valor']);
 
@@ -181,11 +233,13 @@ class Iurco_Cruzdelsur_Model_Carrier_Cruzdelsur
     public function getAllowedMethods() {
         $retirosucursal = 'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_RETIRO_SUCURSAL_CODE;
         $domicilio = 'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_CODE;
+        $domicilioExpress = 'cruzdelsur_' . Iurco_Cruzdelsur_Model_Source_Config_Delivery_Types::CARRIER_ENTREGA_DOMICILIO_EXPRESS_CODE;
 
         return array(
-            $this->_code    => $this->getConfigData('name'),
-            $domicilio      => 'Envio a Domicilio',
-            $retirosucursal => 'Retiro en Sucursal'
+            $this->_code      => $this->getConfigData('name'),
+            $domicilio        => 'Envio a Domicilio',
+            $retirosucursal   => 'Retiro en Sucursal',
+            $domicilioExpress => 'Envio a Domicilio Express',
         );
     }
 
